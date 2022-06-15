@@ -1,9 +1,9 @@
 # WhatsApp Search Bar for Flutter
   WhatsApp Search Bar its a Flutter plugin enable you to build a flexible search bar with buttons filter like WhatsApp Search bar
 
-|<img src="https://raw.githubusercontent.com/mattar88/wp_search_bar/main/example/screenshots/1.png" width="256" hspace="4">
-| <img src="https://raw.githubusercontent.com/mattar88/wp_search_bar/main/example/screenshots/2.png" width="256" hspace="4">
-|<img src="https://raw.githubusercontent.com/mattar88/wp_search_bar/main/example/screenshots/3.png" width="256" hspace="4">|
+|<img src="https://raw.githubusercontent.com/mattar88/wp_search_bar/main/example/screenshots/1.png" width="245" hspace="4">
+| <img src="https://raw.githubusercontent.com/mattar88/wp_search_bar/main/example/screenshots/2.png" width="245" hspace="4">
+|<img src="https://raw.githubusercontent.com/mattar88/wp_search_bar/main/example/screenshots/3.png" width="245" hspace="4">|
 
 ## Usage
 1.Install Package
