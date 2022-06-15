@@ -106,4 +106,39 @@ var buttonFilters = {
 }
 
 ```
- 
+
+# To add Sidebar Menu
+
+<table>
+  <tr>
+    <td align="center">Screenshot 1</td>
+    <td align="center">Screenshot 2</td>
+  </tr>
+  <tr>
+    <td><img alt="A Screenshot of WhatsApp Search Bar" src="./example/screenshots/sidebar_menu_closed.png" width="245"/></td>
+    <td><img alt="Another Screenshot of WhatsApp Search Bar" src="./example/screenshots/sidebar_menu_open.png" width="245"/></td>
+  </tr>
+ </table>
+
+### use a GlobalKey for scaffold
+```
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        key: _scaffoldKey,
+        endDrawer: SidebarMenu(),
+        body: WPSearchBar(
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                _scaffoldKey.currentState?.openEndDrawer();
+              },
+            ),
+          ],
+          ....
+        );
+    }
+```

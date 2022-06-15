@@ -1,6 +1,7 @@
 library wp_search_bar;
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -318,7 +319,7 @@ class _WPSearchBarState extends State<WPSearchBar>
   late Animation<Offset> offset;
   AnimationController? controller;
   final fieldText = TextEditingController();
-  final _debouncer = Debouncer(milliseconds: 100);
+  final _debouncer = Debouncer(milliseconds: 150);
 
   @override
   void initState() {
@@ -326,11 +327,12 @@ class _WPSearchBarState extends State<WPSearchBar>
     // var width = MediaQuery.of(context).size.width;
     // controller = AnimationController(
     //     duration: const Duration(milliseconds: 1500), vsync: this);
-    controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 100));
+    controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 100));
 
-    offset = Tween<Offset>(begin: Offset(1, 0.0), end: Offset(0.0, 0.0))
-        .animate(controller!);
+    offset =
+        Tween<Offset>(begin: const Offset(1, 0.0), end: const Offset(0.0, 0.0))
+            .animate(controller!);
   }
 
   void onPressedButton(filterName) {
@@ -562,15 +564,16 @@ class _WPSearchBarState extends State<WPSearchBar>
 class Debouncer {
   final int milliseconds;
   late VoidCallback action;
-  var _timer = null;
+  Timer _timer = Timer(const Duration(milliseconds: 0), () {});
 
   Debouncer({required this.milliseconds});
 
   run(VoidCallback action) {
-    // log('-----${_timer.isActive}');
-    if (_timer != null) {
-      _timer.cancel();
-    }
+    // log('----- ${_timer.isActive}');
+    // if (_timer.isActive) {
+    _timer.cancel();
+    // }
+
     _timer = Timer(Duration(milliseconds: milliseconds), action);
   }
 }
