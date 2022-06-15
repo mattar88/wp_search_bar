@@ -10,3 +10,7 @@
 
 * Update readme.
 * Improve code.
+
+## 0.0.4
+
+* Update readme.

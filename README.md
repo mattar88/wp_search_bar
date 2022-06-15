@@ -115,8 +115,8 @@ var buttonFilters = {
     <td align="center">Screenshot 2</td>
   </tr>
   <tr>
-    <td><img alt="A Screenshot of WhatsApp Search Bar" src="./example/screenshots/sidebar_menu_closed.png" width="245"/></td>
-    <td><img alt="Another Screenshot of WhatsApp Search Bar" src="./example/screenshots/sidebar_menu_open.png" width="245"/></td>
+    <td><img alt="A Screenshot of WhatsApp Search Bar" src="https://raw.githubusercontent.com/mattar88/wp_search_bar/main/example/screenshots/sidebar_menu_closed.png" width="245"/></td>
+    <td><img alt="Another Screenshot of WhatsApp Search Bar" src="https://raw.githubusercontent.com/mattar88/wp_search_bar/main/example/screenshots/sidebar_menu_open.png" width="245"/></td>
   </tr>
  </table>
 
