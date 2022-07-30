@@ -425,7 +425,7 @@ class _WPSearchBarState extends State<WPSearchBar>
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xff1f2c34),
-          automaticallyImplyLeading: true,
+          automaticallyImplyLeading: !isSearching ? true : false,
           toolbarHeight: height,
           leading: !isSearching ? widget.leading : null,
           title: !isSearching
