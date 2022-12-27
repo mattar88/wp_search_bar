@@ -22,3 +22,9 @@
 ## 0.0.6
 
 * Update the usability of automaticallyImplyLeading option of AppBar
+
+## 0.0.7
+
+* Add background color for AppBar
+* Improve Example
+* Improve code and clean it

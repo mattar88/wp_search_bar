@@ -39,7 +39,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       home: WPSearchBar(
+        appBarBackgroundColor: const Color(0xff1f2c34),
         listOfFilters: const {
           'name': {
             'name': 'name',

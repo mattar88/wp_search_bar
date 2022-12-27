@@ -8,37 +8,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class WPSearchBar extends StatefulWidget {
-  const WPSearchBar({
-    Key? key,
-    required this.listOfFilters,
-    this.materialDesign,
-    this.onSearch,
-    this.body,
-    this.floatingActionButton,
-    this.floatingActionButtonLocation,
-    this.floatingActionButtonAnimator,
-    this.persistentFooterButtons,
-    this.drawer,
-    this.onDrawerChanged,
-    this.endDrawer,
-    this.onEndDrawerChanged,
-    this.bottomNavigationBar,
-    this.bottomSheet,
-    this.backgroundColor,
-    this.resizeToAvoidBottomInset,
-    this.primary = true,
-    this.drawerDragStartBehavior = DragStartBehavior.start,
-    this.extendBody = false,
-    this.extendBodyBehindAppBar = false,
-    this.drawerScrimColor,
-    this.drawerEdgeDragWidth,
-    this.drawerEnableOpenDragGesture = true,
-    this.endDrawerEnableOpenDragGesture = true,
-    this.restorationId,
-    this.leading,
-    this.iconTheme,
-    this.actions,
-  }) : super(key: key);
+  const WPSearchBar(
+      {Key? key,
+      required this.listOfFilters,
+      this.materialDesign,
+      this.onSearch,
+      this.body,
+      this.floatingActionButton,
+      this.floatingActionButtonLocation,
+      this.floatingActionButtonAnimator,
+      this.persistentFooterButtons,
+      this.drawer,
+      this.onDrawerChanged,
+      this.endDrawer,
+      this.onEndDrawerChanged,
+      this.bottomNavigationBar,
+      this.bottomSheet,
+      this.backgroundColor,
+      this.resizeToAvoidBottomInset,
+      this.primary = true,
+      this.drawerDragStartBehavior = DragStartBehavior.start,
+      this.extendBody = false,
+      this.extendBodyBehindAppBar = false,
+      this.drawerScrimColor,
+      this.drawerEdgeDragWidth,
+      this.drawerEnableOpenDragGesture = true,
+      this.endDrawerEnableOpenDragGesture = true,
+      this.restorationId,
+      this.leading,
+      this.iconTheme,
+      this.actions,
+      this.appBarBackgroundColor,
+      this.appBarForegroundColor,
+      this.appBarShape})
+      : super(key: key);
 
   /// {@end-tool}
   final List<Widget>? actions;
@@ -307,6 +310,74 @@ class WPSearchBar extends StatefulWidget {
   ///  * [Scaffold.drawer], in which the [Drawer] is usually placed.
   final Widget? leading;
 
+  /// {@template flutter.material.appbar.shape}
+  /// The shape of the app bar's [Material] as well as its shadow.
+  ///
+  /// If this property is null, then [AppBarTheme.shape] of
+  /// [ThemeData.appBarTheme] is used.  Both properties default to null.
+  /// If both properties are null then the shape of the app bar's [Material]
+  /// is just a simple rectangle.
+  ///
+  /// A shadow is only displayed if the [elevation] is greater than
+  /// zero.
+  /// {@endtemplate}
+  ///
+  /// See also:
+  ///
+  ///  * [elevation], which defines the size of the shadow below the app bar.
+  ///  * [shadowColor], which is the color of the shadow below the app bar.
+  final ShapeBorder? appBarShape;
+
+  /// {@template flutter.material.appbar.backgroundColor}
+  /// The fill color to use for an app bar's [Material].
+  ///
+  /// If null, then the [AppBarTheme.backgroundColor] is used. If that value is also
+  /// null, then [AppBar] uses the overall theme's [ColorScheme.primary] if the
+  /// overall theme's brightness is [Brightness.light], and [ColorScheme.surface]
+  /// if the overall theme's [brightness] is [Brightness.dark].
+  ///
+  /// If this color is a [MaterialStateColor] it will be resolved against
+  /// [MaterialState.scrolledUnder] when the content of the app's
+  /// primary scrollable overlaps the app bar.
+  /// {@endtemplate}
+  ///
+  /// See also:
+  ///
+  ///  * [foregroundColor], which specifies the color for icons and text within
+  ///    the app bar.
+  ///  * [Theme.of], which returns the current overall Material theme as
+  ///    a [ThemeData].
+  ///  * [ThemeData.colorScheme], the thirteen colors that most Material widget
+  ///    default colors are based on.
+  ///  * [ColorScheme.brightness], which indicates if the overall [Theme]
+  ///    is light or dark.
+  final Color? appBarBackgroundColor;
+
+  /// {@template flutter.material.appbar.foregroundColor}
+  /// The default color for [Text] and [Icon]s within the app bar.
+  ///
+  /// If null, then [AppBarTheme.foregroundColor] is used. If that
+  /// value is also null, then [AppBar] uses the overall theme's
+  /// [ColorScheme.onPrimary] if the overall theme's brightness is
+  /// [Brightness.light], and [ColorScheme.onSurface] if the overall
+  /// theme's [brightness] is [Brightness.dark].
+  ///
+  /// This color is used to configure [DefaultTextStyle] that contains
+  /// the toolbar's children, and the default [IconTheme] widgets that
+  /// are created if [iconTheme] and [actionsIconTheme] are null.
+  /// {@endtemplate}
+  ///
+  /// See also:
+  ///
+  ///  * [backgroundColor], which specifies the app bar's background color.
+  ///  * [Theme.of], which returns the current overall Material theme as
+  ///    a [ThemeData].
+  ///  * [ThemeData.colorScheme], the thirteen colors that most Material widget
+  ///    default colors are based on.
+  ///  * [ColorScheme.brightness], which indicates if the overall [Theme]
+  ///    is light or dark.
+  final Color? appBarForegroundColor;
+
   @override
   _WPSearchBarState createState() => _WPSearchBarState();
 }
@@ -319,7 +390,7 @@ class _WPSearchBarState extends State<WPSearchBar>
   late Animation<Offset> offset;
   AnimationController? controller;
   final fieldText = TextEditingController();
-  final _debouncer = Debouncer(milliseconds: 150);
+  final _debouncer = Debouncer(milliseconds: 100);
 
   @override
   void initState() {
@@ -424,7 +495,9 @@ class _WPSearchBarState extends State<WPSearchBar>
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xff1f2c34),
+          backgroundColor: widget.appBarBackgroundColor,
+          foregroundColor: widget.appBarForegroundColor,
+          shape: widget.appBarShape,
           automaticallyImplyLeading: !isSearching ? true : false,
           toolbarHeight: height,
           leading: !isSearching ? widget.leading : null,
@@ -564,15 +637,15 @@ class _WPSearchBarState extends State<WPSearchBar>
 class Debouncer {
   final int milliseconds;
   late VoidCallback action;
-  Timer _timer = Timer(const Duration(milliseconds: 0), () {});
+  var _timer;
 
   Debouncer({required this.milliseconds});
 
   run(VoidCallback action) {
     // log('----- ${_timer.isActive}');
-    // if (_timer.isActive) {
-    _timer.cancel();
-    // }
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
 
     _timer = Timer(Duration(milliseconds: milliseconds), action);
   }
@@ -633,7 +706,7 @@ class _ButtonFilterState extends State<ButtonFilter> {
                 children: [
                   Icon(widget.icon),
                   const SizedBox(
-                    width: 5,
+                    width: 1,
                   ),
                   Text(widget.title),
                 ],
