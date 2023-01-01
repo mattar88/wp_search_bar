@@ -13,6 +13,7 @@ class WPSearchBar extends StatefulWidget {
       required this.listOfFilters,
       this.materialDesign,
       this.onSearch,
+      this.onChangeFilter,
       this.body,
       this.floatingActionButton,
       this.floatingActionButtonLocation,
@@ -40,7 +41,8 @@ class WPSearchBar extends StatefulWidget {
       this.actions,
       this.appBarBackgroundColor,
       this.appBarForegroundColor,
-      this.appBarShape})
+      this.appBarShape,
+      this.isLoading = false})
       : super(key: key);
 
   /// {@end-tool}
@@ -57,8 +59,15 @@ class WPSearchBar extends StatefulWidget {
   final Map<String, Map<String, Object>> listOfFilters;
 
   /// Have two parameters filterSelected and value that typed by user
-  final Function(String? filterSelected, String value, String operation)?
+  final Function(String? filterSelected, String? value, String? operation)?
       onSearch;
+
+  ///Optional callback is called when a filter is selected or closed
+  ///`Selected` true when selected and
+  ///false when closed `FonSearchilterObject` is the filter data given and
+  final Function(
+          String filterName, bool selected, Map<String, dynamic> filterObject)?
+      onChangeFilter;
 
   /// If true, and [bottomNavigationBar] or [persistentFooterButtons]
   /// is specified, then the [body] extends to the bottom of the Scaffold,
@@ -378,6 +387,9 @@ class WPSearchBar extends StatefulWidget {
   ///    is light or dark.
   final Color? appBarForegroundColor;
 
+  /// used to show indicator progress for server request
+  final bool isLoading;
+
   @override
   _WPSearchBarState createState() => _WPSearchBarState();
 }
@@ -386,6 +398,7 @@ class _WPSearchBarState extends State<WPSearchBar>
     with SingleTickerProviderStateMixin {
   bool isSearching = false;
   String? selectedFilter;
+  bool firstTryBackSpaceKey = false;
 
   late Animation<Offset> offset;
   AnimationController? controller;
@@ -407,32 +420,52 @@ class _WPSearchBarState extends State<WPSearchBar>
   }
 
   void onPressedButton(filterName) {
+    widget.onChangeFilter!(filterName, true, widget.listOfFilters[filterName]!);
+    widget.onSearch!(filterName, null, null);
     setState(() {
       selectedFilter = filterName;
     });
   }
 
-  onClearSearch() {
+  onClearSearch(filterName) {
+    log('----onClearSearch--${filterName}');
+    if (filterName != null) {
+      widget.onChangeFilter!(
+          filterName, false, widget.listOfFilters[filterName]!);
+    }
+    widget.onSearch!(null, null, null);
     setState(() {
       fieldText.clear();
+      firstTryBackSpaceKey = false;
       selectedFilter = null;
     });
   }
 
-  ButtonFilter buildButton(Map<String, Object>? buttonData, buttonsColor,
+  ButtonFilter buildButton(Map<String, dynamic>? buttonData, buttonsColor,
       {selected = false}) {
     var name = buttonData != null ? buttonData['name'].toString() : '';
     var title = buttonData != null ? buttonData['title'].toString() : '';
-    var icon = buttonData != null ? buttonData['icon'] as IconData : null;
+
+    var icon = null;
+    if (buttonData != null) {
+      if (buttonData['icon'] is! Widget) {
+        icon = Icon(buttonData['icon']);
+      } else {
+        icon = buttonData['icon'];
+      }
+    }
+
     return ButtonFilter(
-        name: name,
-        onPressed: () {
-          onPressedButton(name);
-        },
-        selected: selected,
-        title: title,
-        icon: icon,
-        buttonsColor: buttonsColor);
+      name: name,
+      onPressed: () {
+        onPressedButton(name);
+      },
+      selected: selected,
+      title: title,
+      icon: icon,
+      buttonsColor: buttonsColor,
+      mark: firstTryBackSpaceKey,
+    );
   }
 
   @override
@@ -541,10 +574,16 @@ class _WPSearchBarState extends State<WPSearchBar>
                                             LogicalKeyboardKey.backspace) {
                                           if (selectedFilter != null &&
                                               fieldText.value.text == '') {
-                                            setState(() {
-                                              selectedFilter = null;
-                                            });
+                                            if (!firstTryBackSpaceKey) {
+                                              setState(() {
+                                                firstTryBackSpaceKey = true;
+                                              });
+                                            } else {
+                                              onClearSearch(selectedFilter);
+                                            }
                                           }
+                                        } else {
+                                          firstTryBackSpaceKey = false;
                                         }
                                       },
                                       child: TextField(
@@ -555,7 +594,7 @@ class _WPSearchBarState extends State<WPSearchBar>
                                         controller: fieldText,
                                         onChanged: (value) {
                                           String operation = '';
-
+                                          log('${value}, ${fieldText.text}');
                                           if (selectedFilter != null) {
                                             operation =
                                                 listOfFilters[selectedFilter]![
@@ -572,17 +611,24 @@ class _WPSearchBarState extends State<WPSearchBar>
                                                 'textField']!['decoration']
                                             as InputDecoration,
                                       ))),
-                          IconButton(
-                            icon: const Icon(Icons.cancel),
-                            onPressed: () {
-                              onClearSearch();
-                              widget.onSearch!(
-                                selectedFilter,
-                                '',
-                                '=',
-                              );
-                            },
-                          )
+                          (widget.isLoading)
+                              ? Transform.scale(
+                                  scale: 0.5,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 3,
+                                  ),
+                                )
+                              : IconButton(
+                                  icon: const Icon(Icons.cancel),
+                                  onPressed: () {
+                                    onClearSearch(selectedFilter);
+                                    widget.onSearch!(
+                                      selectedFilter,
+                                      '',
+                                      '=',
+                                    );
+                                  },
+                                )
                         ],
                       ),
                       if (selectedFilter == null)
@@ -643,7 +689,7 @@ class Debouncer {
 
   run(VoidCallback action) {
     // log('----- ${_timer.isActive}');
-    if (_timer.isActive) {
+    if (_timer != null && _timer.isActive) {
       _timer.cancel();
     }
 
@@ -655,9 +701,10 @@ class ButtonFilter extends StatefulWidget {
   final VoidCallback onPressed;
   final String name;
   final String title;
-  final IconData? icon;
+  final Widget? icon;
   final bool selected;
   final buttonsColor;
+  final bool mark;
 
   const ButtonFilter(
       {Key? key,
@@ -666,7 +713,8 @@ class ButtonFilter extends StatefulWidget {
       required this.title,
       required this.icon,
       required this.selected,
-      this.buttonsColor})
+      this.buttonsColor,
+      this.mark = false})
       : super(key: key);
 
   @override
@@ -688,12 +736,23 @@ class _ButtonFilterState extends State<ButtonFilter> {
                     ? widget.buttonsColor['selected']!['textColor']
                     : widget.buttonsColor['unselected']!['textColor'],
                 backgroundColor: widget.selected
-                    ? widget.buttonsColor['selected']!['backgroundColor']
+                    ? (widget.mark)
+                        ? widget.buttonsColor['selected']!['backgroundColor']
+                            .withOpacity(0.5)
+                        : widget.buttonsColor['selected']!['backgroundColor']
                     : widget.buttonsColor['unselected']!['backgroundColor'],
                 // minimumSize: Size(88, 36),
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                shape: RoundedRectangleBorder(
+                  side: (widget.mark)
+                      ? BorderSide(
+                          width: 1,
+                          color: widget
+                              .buttonsColor['selected']!['backgroundColor'],
+                          style: BorderStyle.solid,
+                        )
+                      : BorderSide.none,
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
                 ),
               ),
               onPressed: () {
@@ -704,7 +763,7 @@ class _ButtonFilterState extends State<ButtonFilter> {
               },
               child: Row(
                 children: [
-                  Icon(widget.icon),
+                  widget.icon!,
                   const SizedBox(
                     width: 1,
                   ),
