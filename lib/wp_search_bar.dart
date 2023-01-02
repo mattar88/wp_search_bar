@@ -429,7 +429,6 @@ class _WPSearchBarState extends State<WPSearchBar>
   }
 
   onClearSearch(filterName) {
-    log('----onClearSearch--${filterName}');
     if (filterName != null) {
       widget.onChangeFilter
           ?.call(filterName, false, widget.listOfFilters[filterName]!);
@@ -602,8 +601,10 @@ class _WPSearchBarState extends State<WPSearchBar>
                                                     'operation'] as String;
                                           }
                                           _debouncer.run(() {
-                                            widget.onSearch!(selectedFilter,
-                                                value, operation);
+                                            widget.onSearch?.call(
+                                                selectedFilter,
+                                                value,
+                                                operation);
                                           });
                                         },
                                         style: materialDesign['textField']![
@@ -623,11 +624,6 @@ class _WPSearchBarState extends State<WPSearchBar>
                                   icon: const Icon(Icons.cancel),
                                   onPressed: () {
                                     onClearSearch(selectedFilter);
-                                    widget.onSearch!(
-                                      selectedFilter,
-                                      '',
-                                      '=',
-                                    );
                                   },
                                 )
                         ],

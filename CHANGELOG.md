@@ -38,3 +38,8 @@
 
 * Fix bugs for optional function
 * Improve Documentation
+
+## 0.1.1
+
+* Fix bugs
+* Clean Code

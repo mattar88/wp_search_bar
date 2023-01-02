@@ -127,7 +127,6 @@ class _MyAppState extends State<MyApp> {
 
             return false;
           }).toList();
-          // log('OnSearch output---${filter}, ${operation}, ${value}}');
           setState(() {
             filteredData;
           });

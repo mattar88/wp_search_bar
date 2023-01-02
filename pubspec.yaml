@@ -1,6 +1,6 @@
 name: wp_search_bar
 description: A Flutter plugin enable you to build a flexible search bar like WhatsApp Search bar.
-version: 0.0.9
+version: 0.1.1
 homepage: https://github.com/mattar88/wp_search_bar
 
 environment:
