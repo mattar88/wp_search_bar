@@ -28,3 +28,8 @@
 * Add background color for AppBar
 * Improve Example
 * Improve code and clean it
+
+## 0.0.8
+
+* Add event when Select/Close Filter and other options
+* Improve Example
