@@ -88,10 +88,6 @@ class _MyAppState extends State<MyApp> {
         materialDesign: const {
           'title': {'text': 'WhatsApp'},
         },
-        onChangeFilter: (filterName, selected, filterObject) {
-          log('onChangeFilter-----');
-          return true;
-        },
         onSearch: (filterSelected, value, operation) {
           // log('${this.data}');
           filteredData = data.where((Map<String, dynamic> element) {
