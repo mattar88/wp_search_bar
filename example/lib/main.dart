@@ -89,6 +89,7 @@ class _MyAppState extends State<MyApp> {
           'title': {'text': 'WhatsApp'},
         },
         onChangeFilter: (filterName, selected, filterObject) {
+          log('onChangeFilter-----');
           return true;
         },
         onSearch: (filterSelected, value, operation) {

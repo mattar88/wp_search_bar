@@ -33,3 +33,8 @@
 
 * Add event when Select/Close Filter and other options
 * Improve Example
+
+## 0.0.9
+
+* Fix bugs for optional function
+* Improve Documentation

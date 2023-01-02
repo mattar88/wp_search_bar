@@ -62,9 +62,9 @@ class WPSearchBar extends StatefulWidget {
   final Function(String? filterSelected, String? value, String? operation)?
       onSearch;
 
-  ///Optional callback is called when a filter is selected or closed
-  ///`Selected` true when selected and
-  ///false when closed `FonSearchilterObject` is the filter data given and
+  ///Optional callback is called when a filter is selected or closed.
+  ///`Selected` is true when selected and
+  ///false when closed, `filterObject` is the filter data
   final Function(
           String filterName, bool selected, Map<String, dynamic> filterObject)?
       onChangeFilter;
@@ -420,8 +420,9 @@ class _WPSearchBarState extends State<WPSearchBar>
   }
 
   void onPressedButton(filterName) {
-    widget.onChangeFilter!(filterName, true, widget.listOfFilters[filterName]!);
-    widget.onSearch!(filterName, null, null);
+    widget.onChangeFilter
+        ?.call(filterName, true, widget.listOfFilters[filterName]!);
+    widget.onSearch?.call(filterName, null, null);
     setState(() {
       selectedFilter = filterName;
     });
@@ -430,10 +431,10 @@ class _WPSearchBarState extends State<WPSearchBar>
   onClearSearch(filterName) {
     log('----onClearSearch--${filterName}');
     if (filterName != null) {
-      widget.onChangeFilter!(
-          filterName, false, widget.listOfFilters[filterName]!);
+      widget.onChangeFilter
+          ?.call(filterName, false, widget.listOfFilters[filterName]!);
     }
-    widget.onSearch!(null, null, null);
+    widget.onSearch?.call(null, null, null);
     setState(() {
       fieldText.clear();
       firstTryBackSpaceKey = false;
@@ -552,7 +553,7 @@ class _WPSearchBarState extends State<WPSearchBar>
                                   isSearching = false;
                                   selectedFilter = null;
                                 });
-                                widget.onSearch!(
+                                widget.onSearch?.call(
                                   selectedFilter,
                                   '',
                                   '=',
