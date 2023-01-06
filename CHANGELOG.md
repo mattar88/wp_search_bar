@@ -43,3 +43,7 @@
 
 * Fix bugs
 * Clean Code
+
+## 0.1.2
+
+* pass progress indicator as given parameter widget

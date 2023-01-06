@@ -53,7 +53,7 @@ class WPSearchBar extends StatefulWidget {
   final IconThemeData? iconTheme;
 
   /// Contains the material design of all elements in AppBar
-  final Map<String, Map<String, Object>>? materialDesign;
+  final Map<String, dynamic>? materialDesign;
 
   /// Contains the definition and settings of all filters
   final Map<String, Map<String, Object>> listOfFilters;
@@ -472,7 +472,7 @@ class _WPSearchBarState extends State<WPSearchBar>
   Widget build(BuildContext context) {
     var listOfFilters = widget.listOfFilters;
 
-    var materialDesign = {
+    Map<String, dynamic> materialDesign = {
       'title': {'text': 'WhatsApp'},
       'buttonsColor': {
         'selected': {
@@ -484,6 +484,12 @@ class _WPSearchBarState extends State<WPSearchBar>
           'backgroundColor': Color.fromARGB(255, 47, 64, 75)
         }
       },
+      'loadingIndicator': Transform.scale(
+        scale: 0.5,
+        child: const CircularProgressIndicator(
+          strokeWidth: 3,
+        ),
+      ),
       'textField': {
         'cursorColor': Colors.white,
         'style': const TextStyle(color: Colors.white),
@@ -504,15 +510,14 @@ class _WPSearchBarState extends State<WPSearchBar>
     materialDesign.removeWhere((key, value) {
       bool exist = false;
       widget.materialDesign?.forEach((keyP, valueP) {
-        if (keyP.contains(key)) {
+        if (keyP == key) {
           exist = true;
         }
       });
       return exist;
     });
 
-    materialDesign
-        .addAll(widget.materialDesign as Map<String, Map<String, Object>>);
+    materialDesign.addAll(widget.materialDesign as Map<String, dynamic>);
 
     final buttonsColor = materialDesign['buttonsColor'];
 
@@ -614,12 +619,7 @@ class _WPSearchBarState extends State<WPSearchBar>
                                             as InputDecoration,
                                       ))),
                           (widget.isLoading)
-                              ? Transform.scale(
-                                  scale: 0.5,
-                                  child: const CircularProgressIndicator(
-                                    strokeWidth: 3,
-                                  ),
-                                )
+                              ? materialDesign['loadingIndicator']
                               : IconButton(
                                   icon: const Icon(Icons.cancel),
                                   onPressed: () {

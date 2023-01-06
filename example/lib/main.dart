@@ -85,8 +85,14 @@ class _MyAppState extends State<MyApp> {
             'icon': Icon(Icons.date_range),
           },
         },
-        materialDesign: const {
-          'title': {'text': 'WhatsApp'},
+        materialDesign: {
+          'title': const {'text': 'WhatsApp'},
+          'loadingIndicator': Transform.scale(
+            scale: 0.5,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+            ),
+          ),
         },
         onSearch: (filterSelected, value, operation) {
           // log('${this.data}');
