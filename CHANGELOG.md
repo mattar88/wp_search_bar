@@ -47,3 +47,7 @@
 ## 0.1.2
 
 * pass progress indicator as given parameter widget
+
+## 0.1.3
+
+* Improve code

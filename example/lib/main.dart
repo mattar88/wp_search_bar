@@ -95,11 +95,8 @@ class _MyAppState extends State<MyApp> {
           ),
         },
         onSearch: (filterSelected, value, operation) {
-          // log('${this.data}');
           filteredData = data.where((Map<String, dynamic> element) {
-            // log('Element----');
             var dataKey = filterSelected;
-            log('Element  ${element[filterSelected]}, filter: ${filterSelected}, value: ${value}');
 
             if (dataKey != null) {
               if (dataKey == 'read_by_person') {
@@ -115,7 +112,8 @@ class _MyAppState extends State<MyApp> {
               return true;
             }
 
-            log('Element2  ${element[dataKey]}, filter: ${dataKey}, value: ${value}');
+            print(
+                'Element ${element[dataKey]}, filter: ${dataKey}, value: ${value}');
             if (dataKey != null &&
                 element[dataKey] != null &&
                 element[dataKey]!.toLowerCase().contains(value.toLowerCase())) {

@@ -422,7 +422,9 @@ class _WPSearchBarState extends State<WPSearchBar>
   void onPressedButton(filterName) {
     widget.onChangeFilter
         ?.call(filterName, true, widget.listOfFilters[filterName]!);
-    widget.onSearch?.call(filterName, null, null);
+
+    widget.onSearch?.call(filterName, fieldText.value.text,
+        widget.listOfFilters[filterName]!['operation'].toString());
     setState(() {
       selectedFilter = filterName;
     });
@@ -504,8 +506,6 @@ class _WPSearchBarState extends State<WPSearchBar>
             )),
       },
     };
-
-    // log('${materialDesign}');
 
     materialDesign.removeWhere((key, value) {
       bool exist = false;
@@ -599,7 +599,7 @@ class _WPSearchBarState extends State<WPSearchBar>
                                         controller: fieldText,
                                         onChanged: (value) {
                                           String operation = '';
-                                          log('${value}, ${fieldText.text}');
+
                                           if (selectedFilter != null) {
                                             operation =
                                                 listOfFilters[selectedFilter]![
@@ -685,7 +685,6 @@ class Debouncer {
   Debouncer({required this.milliseconds});
 
   run(VoidCallback action) {
-    // log('----- ${_timer.isActive}');
     if (_timer != null && _timer.isActive) {
       _timer.cancel();
     }
