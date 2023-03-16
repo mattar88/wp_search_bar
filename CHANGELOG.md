@@ -51,3 +51,7 @@
 ## 0.1.3
 
 * Improve code
+
+## 0.1.4
+
+* Fix the problem right to left

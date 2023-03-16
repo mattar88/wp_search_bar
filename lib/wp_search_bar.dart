@@ -546,7 +546,6 @@ class _WPSearchBarState extends State<WPSearchBar>
                   child: Column(
                     children: [
                       Row(
-                        textDirection: TextDirection.ltr,
                         children: <Widget>[
                           IconButton(
                             icon: const Icon(Icons.arrow_back),

@@ -18,7 +18,7 @@ $ flutter pub add wp_search_bar
 This will add a line like this to you package's pubspec.yaml (and run an implicit `dart pub get`):
 ```
 dependencies:
-  wp_search_bar: ^0.1.3
+  wp_search_bar: ^0.1.4
 ```
 
 2.Define data that you want to show in listview
